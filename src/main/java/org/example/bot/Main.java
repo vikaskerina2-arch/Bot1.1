@@ -2,23 +2,24 @@ package org.example.bot;
 
 public class Main {
 
-    public void processUserInput(String userInput, String userId) {
+    public String processUserInput(String userInput, String userId) {
         System.out.println("сообщение: " + userInput + " от: " + userId);
-        String outputText;
-
-        if ("/start".equals(userInput)) {
-            outputText = startMessage();
-        } else if ("/help".equals(userInput)) {
-            outputText = helpMessage();
-        } else {
-            outputText = "Вы ввели: " + userInput;
-        }
-
+        String outputText = Response(userInput);
         System.out.println("Ответ: " + outputText);
+        return outputText;
     }
 
-    // Изменим модификаторы доступа на public
-    public String startMessage() {
+    private String Response(String userInput){
+        if ("/start".equals(userInput)) {
+            return startMessage();
+        } else if ("/help".equals(userInput)) {
+            return helpMessage();
+        } else {
+            return "Вы ввели: " + userInput;
+        }
+    }
+
+    String startMessage() {
         return "Добро пожаловать в наш первый бот!\n" +
                 "Он умеет возвращать текст, который вы ему напишите.\n" +
                 "Просто отправьте ему текстовое сообщение, и он ответит вам.\n" +
@@ -27,7 +28,7 @@ public class Main {
                 "/help - показать, как я работаю\n";
     }
 
-    public String helpMessage() {
+    String helpMessage() {
         return "Справка по работе:\n" +
                 "Бот умеет возвращать текст, который вы ему напишите.\n" +
                 "Например: вы пишите \"привет\", он ответит:\n" +

@@ -16,37 +16,32 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String userInput = update.getMessage().getText();
             String userId = update.getMessage().getFrom().getId().toString();
+            String chatId = update.getMessage().getChatId().toString();
 
-            mainProcessor.processUserInput(userInput, userId);
+            String response = mainProcessor.processUserInput(userInput,userId);
+            sendMessage(chatId,response);
+        }
+    }
 
-            String responseText;
-            if ("/start".equals(userInput)) {
-                responseText = mainProcessor.startMessage();
-            } else if ("/help".equals(userInput)) {
-                responseText = mainProcessor.helpMessage();
-            } else {
-                responseText = "Вы ввели: " + userInput;
-            }
+    private void sendMessage(String chatId, String text){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
 
-            SendMessage message = new SendMessage();
-            message.setChatId(update.getMessage().getChatId().toString());
-            message.setText(responseText);
-
-            try {
-                execute(message); // Убрали статический импорт
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+        try{
+            execute(message);
+        }catch(TelegramApiException e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public String getBotUsername() {
-        return "test_my_super_demo_bot";  // Замените на имя вашего бота
+        return "test_my_super_demo_bot";
     }
 
     @Override
     public String getBotToken() {
-        return "8371469199:AAH6HpFEje3PqgwLHjMXdyhmYVJiIQxCUmA";  // Замените на токен от @BotFather
+        return System.getenv("TELEGRAM_BOT_TOKEN");
     }
 }
